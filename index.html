@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dubai Luxury Property Comparison</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #0d6efd;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .control-group {
+            margin: 10px;
+        }
+        
+        select, button {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            background-color: white;
+            font-size: 14px;
+        }
+        
+        button {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        button:hover {
+            background-color: #0b5ed7;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chart-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            height: 400px;
+        }
+        
+        .chart-title {
+            text-align: center;
+            margin-top: 0;
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .property-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .property-table th, .property-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .property-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .property-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .property-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .property-table tr:hover {
+            background-color: #e9ecef;
+        }
+        
+        .key-insight {
+            background-color: #e7f5ff;
+            border-left: 4px solid #0d6efd;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .key-insight h3 {
+            margin-top: 0;
+            color: #0d6efd;
+        }
+        
+        .key-insight ul {
+            margin-bottom: 0;
+        }
+        
+        .community-color {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+        
+        .value-indicator {
+            font-weight: bold;
+        }
+        
+        .value-good {
+            color: #198754;
+        }
+        
+        .value-average {
+            color: #fd7e14;
+        }
+        
+        .value-premium {
+            color: #dc3545;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .highlight-row td {
+            background-color: rgba(255, 255, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Dubai Luxury Villa Communities Comparison</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="property-size">Property Size: </label>
+                <select id="property-size">
+                    <option value="all">All Sizes</option>
+                    <option value="4bed">4 Bedroom</option>
+                    <option value="5bed">5 Bedroom</option>
+                    <option value="6bed">6 Bedroom</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="chart-type">Chart Type: </label>
+                <select id="chart-type">
+                    <option value="price-comparison">Price Comparison</option>
+                    <option value="price-per-sqft">Price per Sq Ft</option>
+                    <option value="value-analysis">Value Analysis</option>
+                    <option value="community-features">Community Features</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <button id="highlight-value">Highlight Best Value</button>
+            </div>
+        </div>
+        
+        <div class="key-insight">
+            <h3>Key Insights:</h3>
+            <ul id="insights-list">
+                <li><strong>OASIS offers the best value</strong> with the lowest price per sqft (BUA: 1,600 AED, Plot: 1,300 AED) despite being the largest community (100M+ sqft)</li>
+                <li><strong>Jumeirah Islands is the most premium</strong> with prices 2-3 times higher per sqft than OASIS</li>
+                <li><strong>Tilal Al Ghaf</strong> has the largest villas but <strong>higher plot pricing</strong> (3,100-3,700 AED per sqft)</li>
+                <li><strong>Nakheel D1 West</strong> is a smaller community (467 residences) with mid-range pricing</li>
+            </ul>
+        </div>
+        
+        <div class="charts-container">
+            <div class="chart-card">
+                <h3 class="chart-title">Price Comparison (Millions AED)</h3>
+                <canvas id="price-chart"></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Built-Up Area (BUA) in Sq Ft</h3>
+                <canvas id="bua-chart"></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Price per Square Foot (AED)</h3>
+                <canvas id="price-per-sqft-chart"></canvas>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Plot Size in Sq Ft</h3>
+                <canvas id="plot-chart"></canvas>
+            </div>
+            
+            <div class="chart-card full-width">
+                <h3 class="chart-title">Value Analysis: BUA vs Price</h3>
+                <canvas id="value-chart"></canvas>
+            </div>
+        </div>
+        
+        <table class="property-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>
+                        <span class="community-color" style="background-color: #FFDA00;"></span>
+                        OASIS
+                    </th>
+                    <th>
+                        <span class="community-color" style="background-color: #00B4D8;"></span>
+                        Jumeirah Islands
+                    </th>
+                    <th>
+                        <span class="community-color" style="background-color: #9D4EDD;"></span>
+                        Tilal Al Ghaf
+                    </th>
+                    <th>
+                        <span class="community-color" style="background-color: #38B000;"></span>
+                        Nakheel D1 West
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="comparison-table">
+                <!-- Will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Property data from the table
+        const propertyData = {
+            "OASIS": {
+                color: "#FFDA00",
+                beds: [4, 5, 6],
+                bua: [6000, 10300, 12900],
+                plot: [8500, 12000, 16000],
+                price: [10, 16, 20], // in millions
+                buaPrice: 1600, // AED per sqft
+                plotPrice: 1300, // AED per sqft
+                hasBasement: "YES",
+                far: 0.7,
+                onLagoons: "YES (Filtered Flowing streams)",
+                communitySize: "100M+ sqft",
+                residences: 7000,
+                openArea: "~60% Plus"
+            },
+            "Jumeirah Islands": {
+                color: "#00B4D8",
+                beds: [4, 5, 6],
+                bua: [5200, 6000, 7200],
+                plot: [8800, 11000, 14000],
+                price: [18, 26, 40], // average of 35-45M
+                buaPrice: 4500, // average of 3500-5500
+                plotPrice: 2475, // average of 2100-2850
+                hasBasement: "NO",
+                far: 0.55, // average of 0.5-0.6
+                onLagoons: "YES (Seawater Lakes)",
+                communitySize: "28M sqft",
+                residences: 800,
+                openArea: "~77%"
+            },
+            "Tilal Al Ghaf": {
+                color: "#9D4EDD",
+                beds: [5, 6],
+                bua: [13000, 17700],
+                plot: [11000, 17500], // average of 10000-12000 for 5-bed
+                price: [37, 57],
+                buaPrice: 2800,
+                plotPrice: 3400, // average of 3100-3700
+                hasBasement: "YES",
+                far: 1.1,
+                onLagoons: "NO (Except first row)",
+                communitySize: "32M sqft",
+                residences: 6500,
+                openArea: "~20%"
+            },
+            "Nakheel D1 West": {
+                color: "#38B000",
+                beds: [4, 5, 6],
+                bua: [6084, 8242.5, 11077], // average of ranges
+                plot: [7100, 8150, 11000], // average of ranges
+                price: [14, 20, 35],
+                buaPrice: 2750, // average of 2400-3100
+                plotPrice: 2650, // average of 2100-3200
+                hasBasement: "NO (Except 7beds)",
+                far: 1.1,
+                onLagoons: "NO (Except 6 & 7beds)",
+                communitySize: "N/A",
+                residences: 467,
+                openArea: "N/A"
+            }
+        };
+
+        // Chart objects
+        let priceChart, buaChart, pricePerSqftChart, plotChart, valueChart;
+        
+        // Utility functions
+        function getBedroomFilter() {
+            const filter = document.getElementById('property-size').value;
+            if (filter === 'all') return null;
+            
+            const bedSize = parseInt(filter.replace('bed', ''));
+            return bedSize;
+        }
+        
+        function getFilteredData(property, attribute) {
+            const filter = getBedroomFilter();
+            const data = propertyData[property];
+            
+            if (filter === null) {
+                // If showing all, return the average
+                if (Array.isArray(data[attribute])) {
+                    return data[attribute].reduce((a, b) => a + b, 0) / data[attribute].length;
+                }
+                return data[attribute];
+            }
+            
+            // Find the index of the filtered bed size
+            const index = data.beds.indexOf(filter);
+            if (index === -1) return null; // This property doesn't have this bed size
+            
+            return Array.isArray(data[attribute]) ? data[attribute][index] : data[attribute];
+        }
+        
+        // Initialize and update charts
+        function initCharts() {
+            // Price Comparison Chart
+            const priceCtx = document.getElementById('price-chart').getContext('2d');
+            priceChart = new Chart(priceCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(propertyData),
+                    datasets: [{
+                        label: 'Price (Million AED)',
+                        data: Object.keys(propertyData).map(prop => getFilteredData(prop, 'price')),
+                        backgroundColor: Object.values(propertyData).map(prop => prop.color),
+                        borderColor: Object.values(propertyData).map(prop => adjustColor(prop.color, -30)),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Million AED'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Price: ${context.raw} Million AED`;
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // BUA Chart
+            const buaCtx = document.getElementById('bua-chart').getContext('2d');
+            buaChart = new Chart(buaCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(propertyData),
+                    datasets: [{
+                        label: 'Built-Up Area (sq ft)',
+                        data: Object.keys(propertyData).map(prop => getFilteredData(prop, 'bua')),
+                        backgroundColor: Object.values(propertyData).map(prop => prop.color),
+                        borderColor: Object.values(propertyData).map(prop => adjustColor(prop.color, -30)),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Square Feet'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `BUA: ${context.raw.toLocaleString()} sq ft`;
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Price per sqft Chart
+            const pricePerSqftCtx = document.getElementById('price-per-sqft-chart').getContext('2d');
+            pricePerSqftChart = new Chart(pricePerSqftCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['BUA Price', 'Plot Price'],
+                    datasets: Object.keys(propertyData).map(property => ({
+                        label: property,
+                        data: [
+                            propertyData[property].buaPrice,
+                            propertyData[property].plotPrice
+                        ],
+                        backgroundColor: propertyData[property].color,
+                        borderColor: adjustColor(propertyData[property].color, -30),
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'AED per sq ft'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw} AED per sq ft`;
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Plot Size Chart
+            const plotCtx = document.getElementById('plot-chart').getContext('2d');
+            plotChart = new Chart(plotCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(propertyData),
+                    datasets: [{
+                        label: 'Plot Size (sq ft)',
+                        data: Object.keys(propertyData).map(prop => getFilteredData(prop, 'plot')),
+                        backgroundColor: Object.values(propertyData).map(prop => prop.color),
+                        borderColor: Object.values(propertyData).map(prop => adjustColor(prop.color, -30)),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Square Feet'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Plot: ${context.raw.toLocaleString()} sq ft`;
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            // Value Analysis Chart (Scatter plot of BUA vs Price)
+            const valueCtx = document.getElementById('value-chart').getContext('2d');
+            const valueDatasets = [];
+            
+            Object.keys(propertyData).forEach(property => {
+                const data = propertyData[property];
+                const points = [];
+                
+                for (let i = 0; i < data.beds.length; i++) {
+                    if (data.bua[i] && data.price[i]) {
+                        points.push({
+                            x: data.bua[i],
+                            y: data.price[i],
+                            bedrooms: data.beds[i]
+                        });
+                    }
+                }
+                
+                valueDatasets.push({
+                    label: property,
+                    data: points,
+                    backgroundColor: data.color,
+                    borderColor: adjustColor(data.color, -30),
+                    pointRadius: 8,
+                    pointHoverRadius: 12
+                });
+            });
+            
+            valueChart = new Chart(valueCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: valueDatasets
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Built-Up Area (sq ft)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (Million AED)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const point = context.raw;
+                                    return [
+                                        `${context.dataset.label}`,
+                                        `${point.bedrooms} Bedroom`,
+                                        `BUA: ${point.x.toLocaleString()} sq ft`,
+                                        `Price: ${point.y} Million AED`,
+                                        `Price per BUA: ${(point.y * 1000000 / point.x).toFixed(0)} AED/sq ft`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function updateCharts() {
+            // Update Price Chart
+            priceChart.data.datasets[0].data = Object.keys(propertyData).map(prop => 
+                getFilteredData(prop, 'price')
+            );
+            priceChart.update();
+            
+            // Update BUA Chart
+            buaChart.data.datasets[0].data = Object.keys(propertyData).map(prop => 
+                getFilteredData(prop, 'bua')
+            );
+            buaChart.update();
+            
+            // Update Plot Size Chart
+            plotChart.data.datasets[0].data = Object.keys(propertyData).map(prop => 
+                getFilteredData(prop, 'plot')
+            );
+            plotChart.update();
+            
+            // Filter value chart if needed
+            const bedFilter = getBedroomFilter();
+            const filteredDatasets = valueChart.data.datasets.map(dataset => {
+                const newDataset = {...dataset};
+                if (bedFilter === null) {
+                    // Show all data points
+                    newDataset.data = [...newDataset.data];
+                } else {
+                    // Filter by bedroom size
+                    newDataset.data = newDataset.data.filter(point => point.bedrooms === bedFilter);
+                }
+                return newDataset;
+            });
+            
+            valueChart.data.datasets = filteredDatasets;
+            valueChart.update();
+        }
+        
+        function populateComparisonTable() {
+            const tbody = document.getElementById('comparison-table');
+            tbody.innerHTML = '';
+            
+            // Define rows to display
+            const rows = [
+                { label: 'Bed Sizes Available', attr: 'beds', format: val => val.join(', ') + ' bed' },
+                { label: 'Starting Price (AED)', attr: 'price', format: val => val[0] + ' Million' },
+                { label: 'BUA Price per sqft', attr: 'buaPrice', format: val => val + ' AED', valueClass: true },
+                { label: 'Plot Price per sqft', attr: 'plotPrice', format: val => val + ' AED', valueClass: true },
+                { label: 'Has Basement?', attr: 'hasBasement', format: val => val },
+                { label: 'Floor Area Ratio', attr: 'far', format: val => val },
+                { label: 'On Lagoons?', attr: 'onLagoons', format: val => val },
+                { label: 'Community Size', attr: 'communitySize', format: val => val },
+                { label: 'Number of Residences', attr: 'residences', format: val => val.toLocaleString() },
+                { label: 'Open Area', attr: 'openArea', format: val => val }
+            ];
+            
+            rows.forEach(row => {
+                const tr = document.createElement('tr');
+                
+                const th = document.createElement('th');
+                th.textContent = row.label;
+                tr.appendChild(th);
+                
+                Object.keys(propertyData).forEach(property => {
+                    const value = propertyData[property][row.attr];
+                    const td = document.createElement('td');
+                    
+                    // Add value classes for price per sqft
+                    if (row.valueClass) {
+                        let valueClass = '';
+                        if (row.attr === 'buaPrice' || row.attr === 'plotPrice') {
+                            if (value < 2000) valueClass = 'value-good';
+                            else if (value < 3000) valueClass = 'value-average';
+                            else valueClass = 'value-premium';
+                        }
+                        
+                        const span = document.createElement('span');
+                        span.textContent = row.format(value);
+                        span.className = `value-indicator ${valueClass}`;
+                        td.appendChild(span);
+                    } else {
+                        td.textContent = row.format(value);
+                    }
+                    
+                    tr.appendChild(td);
+                });
+                
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // Highlight best value properties
+        function highlightBestValue() {
+            // Clear all highlighted rows
+            const rows = document.querySelectorAll('.property-table tr');
+            rows.forEach(row => row.classList.remove('highlight-row'));
+            
+            // Highlight OASIS row for BUA Price
+            rows[3].classList.add('highlight-row');
+            
+            // Highlight OASIS row for Plot Price
+            rows[4].classList.add('highlight-row');
+            
+            // Update insights
+            document.getElementById('insights-list').innerHTML = `
+                <li><strong>OASIS offers exceptional value</strong> with the lowest price per sqft for both BUA (1,600 AED) and Plot (1,300 AED)</li>
+                <li><strong>Jumeirah Islands commands premium pricing</strong> at 4,500 AED per BUA sqft, nearly 3x higher than OASIS</li>
+                <li><strong>OASIS has the largest community size</strong> (100M+ sqft) with ~7000 residences and 60%+ open areas</li>
+                <li><strong>For the same budget</strong>, you can get a significantly larger villa in OASIS compared to other communities</li>
+            `;
+        }
+        
+        // Helper function to adjust color brightness
+        function adjustColor(color, amount) {
+            return color;
+        }
+        
+        // Initialize charts and table
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            populateComparisonTable();
+            
+            // Add event listeners
+            document.getElementById('property-size').addEventListener('change', updateCharts);
+            document.getElementById('highlight-value').addEventListener('click', highlightBestValue);
+            document.getElementById('chart-type').addEventListener('change', function() {
+                const chartType = this.value;
+                const allCharts = document.querySelectorAll('.chart-card');
+                
+                allCharts.forEach(chart => {
+                    chart.style.display = 'none';
+                });
+                
+                switch (chartType) {
+                    case 'price-comparison':
+                        document.getElementById('price-chart').parentElement.style.display = 'block';
+                        document.getElementById('bua-chart').parentElement.style.display = 'block';
+                        break;
+                    case 'price-per-sqft':
+                        document.getElementById('price-per-sqft-chart').parentElement.style.display = 'block';
+                        document.getElementById('plot-chart').parentElement.style.display = 'block';
+                        break;
+                    case 'value-analysis':
+                        document.getElementById('value-chart').parentElement.style.display = 'block';
+                        break;
+                    case 'community-features':
+                        // Show nothing, just the table below
+                        break;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
