@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dubai Population and Real Estate Trends</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #333;
+    }
+    #chart_div {
+      width: 100%;
+      height: 500px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .stats {
+      background-color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .stats p {
+      margin: 8px 0;
+      color: #444;
+    }
+    .footer {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      margin-top: 30px;
+      background-color: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .footer p {
+      margin: 5px 0;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #3B82F6;
+      text-decoration: none;
+      padding: 10px;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Year', 'Population', 'Price Index'],
+        ['2000',  862000, 35],
+        ['2001',  953800, 45],
+        ['2002',  1045600, 55],
+        ['2003',  1137400, 65],
+        ['2004',  1229200, 75],
+        ['2005',  1321000, 85],
+        ['2006',  1517000, 102.5],
+        ['2007',  1713000, 120],
+        ['2008',  1777000, 113.3],
+        ['2009',  1841000, 106.7],
+        ['2010',  1905000, 100],
+        ['2011',  2013000, 117.5],
+        ['2012',  2121000, 135],
+        ['2013',  2229000, 152.5],
+        ['2014',  2337500, 170],
+        ['2015',  2446000, 147.5],
+        ['2016',  2564000, 125],
+        ['2017',  2682500, 121.3],
+        ['2018',  2801000, 117.5],
+        ['2019',  2919500, 113.8],
+        ['2020',  3038000, 110],
+        ['2021',  3175000, 127.5],
+        ['2022',  3312000, 145],
+        ['2023',  3450000, 157.5],
+        ['2024',  3588000, 170]
+      ]);
+
+      var options = {
+        title: 'Dubai Population and Real Estate Price Index (2000-2024)',
+        titleTextStyle: {
+          fontSize: 16,
+          bold: true
+        },
+        curveType: 'function',
+        legend: { position: 'bottom' },
+        series: {
+          0: {targetAxisIndex: 0, color: '#3B82F6'}, // Population (blue)
+          1: {targetAxisIndex: 1, color: '#EF4444'} // Price Index (red)
+        },
+        vAxes: {
+          0: {
+            title: 'Population', 
+            format: '#,###', 
+            viewWindow: {min: 0},
+            textStyle: {color: '#3B82F6'}
+          },
+          1: {
+            title: 'Price Index (2010=100)', 
+            viewWindow: {min: 0},
+            textStyle: {color: '#EF4444'}
+          }
+        },
+        hAxis: {
+          title: 'Year',
+          slantedText: true,
+          slantedTextAngle: 45
+        },
+        chartArea: {
+          width: '80%',
+          height: '70%'
+        },
+        backgroundColor: 'transparent',
+        animation: {
+          startup: true,
+          duration: 1000,
+          easing: 'out'
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+      
+      // Responsive chart
+      window.addEventListener('resize', function() {
+        chart.draw(data, options);
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Dubai Population and Real Estate Price Index (2000-2024)</h1>
+    
+    <div class="stats">
+      <p><strong>Population growth:</strong> 4.2x increase (from 0.86M to 3.59M)</p>
+      <p><strong>Real estate price growth:</strong> 4.9x increase (from index 35 to 170)</p>
+    </div>
+    
+    <div id="chart_div"></div>
+    
+    <div class="footer">
+      <p>Notes: Real estate price index uses 2010 as base year (100). Data interpolated between available points.</p>
+      <p>Sources: Population data from Dubai Statistics Center, UN data, and World Population Review.</p>
+      <p>Real estate data approximated from Dubai Land Department, REIDIN, and market reports.</p>
+    </div>
+    
+    <a href="index.html" class="back-link">← Back to main page</a>
+  </div>
+</body>
+</html>
