@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dubai Population and Real Estate Trends</title>
+  <!-- Required libraries -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.5.0/umd/Recharts.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Dubai Population and Real Estate Price Index (2000-2024)</h1>
+    <div id="dubai-chart-root"></div>
+    <p><a href="index.html">← Back to main page</a></p>
+  </div>
+  
+  <script src="dubai-pop-price-chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('dubai-chart-root');
+      ReactDOM.render(React.createElement(DubaiChart), container);
+    });
+  </script>
+</body>
+</html>
