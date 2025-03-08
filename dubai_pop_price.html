@@ -18,7 +18,6 @@
       max-width: 1000px;
       margin: 0 auto;
     }
-    /* Add some basic chart styling */
     #dubai-chart-root {
       min-height: 500px;
       margin-top: 20px;
@@ -36,26 +35,23 @@
     <p><a href="index.html">← Back to main page</a></p>
   </div>
   
-  <!-- Make sure the script src matches your exact file name -->
+  <!-- Load the chart script first -->
   <script src="dubai-pop-price-chart.js"></script>
+  
+  <!-- Then render it in a separate script -->
   <script>
-    // Wait for DOM and scripts to fully load
-    window.addEventListener('load', function() {
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function() {
       try {
-        // Debugging - verify objects are available
-        console.log("React available:", !!window.React);
-        console.log("ReactDOM available:", !!window.ReactDOM);
-        console.log("Recharts available:", !!window.Recharts);
-        console.log("DubaiChart component available:", !!window.DubaiChart);
-        
+        console.log("Rendering chart...");
         const container = document.getElementById('dubai-chart-root');
-        if (!container) {
-          console.error("Chart container not found!");
-          return;
-        }
         
-        // Render component with error handling
-        ReactDOM.render(React.createElement(DubaiChart), container);
+        // Render the chart - using the globally defined renderDubaiChart function
+        if (typeof renderDubaiChart === 'function') {
+          renderDubaiChart(container);
+        } else {
+          throw new Error("renderDubaiChart function not found");
+        }
       } catch (error) {
         console.error("Error rendering chart:", error);
         document.getElementById('dubai-chart-root').innerHTML = 
