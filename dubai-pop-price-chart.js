@@ -1,163 +1,122 @@
-// Create a simpler, more direct approach without complex React component structure
-function renderDubaiChart(container) {
-  // Data for Dubai population and real estate price index
-  const data = [
-    { year: 2000, population: 862000, priceIndex: 35 },
-    { year: 2001, population: 953800, priceIndex: 45 },
-    { year: 2002, population: 1045600, priceIndex: 55 },
-    { year: 2003, population: 1137400, priceIndex: 65 },
-    { year: 2004, population: 1229200, priceIndex: 75 },
-    { year: 2005, population: 1321000, priceIndex: 85 },
-    { year: 2006, population: 1517000, priceIndex: 102.5 },
-    { year: 2007, population: 1713000, priceIndex: 120 },
-    { year: 2008, population: 1777000, priceIndex: 113.3 },
-    { year: 2009, population: 1841000, priceIndex: 106.7 },
-    { year: 2010, population: 1905000, priceIndex: 100 },
-    { year: 2011, population: 2013000, priceIndex: 117.5 },
-    { year: 2012, population: 2121000, priceIndex: 135 },
-    { year: 2013, population: 2229000, priceIndex: 152.5 },
-    { year: 2014, population: 2337500, priceIndex: 170 },
-    { year: 2015, population: 2446000, priceIndex: 147.5 },
-    { year: 2016, population: 2564000, priceIndex: 125 },
-    { year: 2017, population: 2682500, priceIndex: 121.3 },
-    { year: 2018, population: 2801000, priceIndex: 117.5 },
-    { year: 2019, population: 2919500, priceIndex: 113.8 },
-    { year: 2020, population: 3038000, priceIndex: 110 },
-    { year: 2021, population: 3175000, priceIndex: 127.5 },
-    { year: 2022, population: 3312000, priceIndex: 145 },
-    { year: 2023, population: 3450000, priceIndex: 157.5 },
-    { year: 2024, population: 3588000, priceIndex: 170 },
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the canvas element
+  const ctx = document.getElementById('dubaiChart').getContext('2d');
+  
+  // Years for the x-axis
+  const years = [
+    2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 
+    2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 
+    2021, 2022, 2023, 2024
   ];
-
-  // Create basic chart elements
-  const { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
   
-  // Formatter for population values (in millions)
-  const populationFormatter = (value) => `${(value / 1000000).toFixed(1)}M`;
+  // Population data (in thousands)
+  const populationData = [
+    862, 954, 1046, 1137, 1229, 1321, 1517, 1713, 1777, 1841, 1905,
+    2013, 2121, 2229, 2338, 2446, 2564, 2683, 2801, 2920, 3038,
+    3175, 3312, 3450, 3588
+  ];
   
-  // Custom tooltip
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return React.createElement('div', { 
-        style: {
-          backgroundColor: 'white',
-          padding: '10px',
-          border: '1px solid #ccc',
-          borderRadius: '5px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+  // Price index data
+  const priceIndexData = [
+    35, 45, 55, 65, 75, 85, 102.5, 120, 113.3, 106.7, 100,
+    117.5, 135, 152.5, 170, 147.5, 125, 121.3, 117.5, 113.8, 110,
+    127.5, 145, 157.5, 170
+  ];
+  
+  // Create the chart
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: [
+        {
+          label: 'Population (millions)',
+          data: populationData,
+          borderColor: '#3B82F6', // Blue
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          yAxisID: 'y',
+          tension: 0.3
+        },
+        {
+          label: 'Price Index (2010=100)',
+          data: priceIndexData,
+          borderColor: '#EF4444', // Red
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          yAxisID: 'y1',
+          tension: 0.3
         }
-      }, [
-        React.createElement('p', { key: 'year', style: { fontWeight: 'bold', margin: '0 0 5px 0' } }, 
-          `Year: ${label}`),
-        React.createElement('p', { key: 'pop', style: { color: '#3B82F6', margin: '0 0 5px 0' } }, 
-          `Population: ${populationFormatter(payload[0].value)}`),
-        React.createElement('p', { key: 'price', style: { color: '#EF4444', margin: '0' } }, 
-          `Price Index: ${payload[1].value}`)
-      ]);
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.datasetIndex === 0) {
+                // Format population as millions
+                label += (context.raw / 1000).toFixed(2) + 'M';
+              } else {
+                label += context.raw;
+              }
+              return label;
+            }
+          }
+        },
+        legend: {
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            padding: 20
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            maxRotation: 45,
+            minRotation: 45
+          }
+        },
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          title: {
+            display: true,
+            text: 'Population'
+          },
+          // Format the ticks as millions
+          ticks: {
+            callback: function(value) {
+              return (value / 1000) + 'M';
+            }
+          }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          title: {
+            display: true,
+            text: 'Price Index'
+          },
+          // Don't show grid lines for this axis
+          grid: {
+            drawOnChartArea: false
+          }
+        }
+      }
     }
-    return null;
-  };
-
-  // Stats container
-  const statsElement = React.createElement('div', {
-    style: {
-      marginBottom: '16px',
-      padding: '8px',
-      backgroundColor: '#f9fafb',
-      borderRadius: '6px'
-    }
-  }, [
-    React.createElement('p', { key: 'pop-stat', style: { fontSize: '0.875rem', margin: '0 0 5px 0' } },
-      'Population growth: 4.2x increase (from 0.86M to 3.59M)'),
-    React.createElement('p', { key: 'price-stat', style: { fontSize: '0.875rem', margin: '0' } },
-      'Real estate price growth: 4.9x increase (from index 35 to 170)')
-  ]);
-
-  // Chart component
-  const chartElement = React.createElement(ResponsiveContainer, {
-    width: '100%',
-    height: 400
-  }, 
-    React.createElement(LineChart, {
-      data: data,
-      margin: { top: 10, right: 30, left: 20, bottom: 30 }
-    }, [
-      React.createElement(CartesianGrid, { key: 'grid', strokeDasharray: '3 3' }),
-      React.createElement(XAxis, { 
-        key: 'xaxis',
-        dataKey: 'year', 
-        interval: 4, 
-        angle: -45, 
-        textAnchor: 'end' 
-      }),
-      React.createElement(YAxis, { 
-        key: 'yleft',
-        yAxisId: 'left', 
-        orientation: 'left', 
-        stroke: '#3B82F6', 
-        tickFormatter: populationFormatter,
-        domain: [0, 4000000]
-      }),
-      React.createElement(YAxis, { 
-        key: 'yright',
-        yAxisId: 'right', 
-        orientation: 'right', 
-        stroke: '#EF4444',
-        domain: [0, 180]
-      }),
-      React.createElement(Tooltip, { key: 'tooltip', content: CustomTooltip }),
-      React.createElement(Legend, { key: 'legend' }),
-      React.createElement(Line, { 
-        key: 'line1',
-        yAxisId: 'left',
-        type: 'monotone', 
-        dataKey: 'population', 
-        name: 'Population', 
-        stroke: '#3B82F6', 
-        strokeWidth: 2,
-        dot: { r: 3 },
-        activeDot: { r: 6 }
-      }),
-      React.createElement(Line, { 
-        key: 'line2',
-        yAxisId: 'right',
-        type: 'monotone', 
-        dataKey: 'priceIndex', 
-        name: 'Price Index (2010=100)', 
-        stroke: '#EF4444', 
-        strokeWidth: 2,
-        dot: { r: 3 },
-        activeDot: { r: 6 }
-      })
-    ])
-  );
-
-  // Footer notes
-  const footerElement = React.createElement('div', {
-    style: {
-      marginTop: '16px',
-      fontSize: '0.75rem',
-      color: '#6b7280',
-      textAlign: 'center'
-    }
-  }, [
-    React.createElement('p', { key: 'note1', style: { margin: '0 0 5px 0' } },
-      'Notes: Real estate price index uses 2010 as base year (100). Data interpolated between available points.'),
-    React.createElement('p', { key: 'note2', style: { margin: '0' } },
-      'Sources: Population data from Dubai Statistics Center, UN data, and World Population Review.')
-  ]);
-
-  // Main container
-  const mainElement = React.createElement('div', {
-    style: {
-      width: '100%',
-      backgroundColor: 'white',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
-    }
-  }, [statsElement, chartElement, footerElement]);
-
-  // Render to container
-  ReactDOM.render(mainElement, container);
-}
+  });
+});
